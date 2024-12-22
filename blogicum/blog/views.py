@@ -17,16 +17,19 @@ def index_posts(posts):
 
 def index(request):
     posts = index_posts(Post.objects)
-    # posts.order_by('pub_date')
-    return render(request, 'blog/index.html', {'post_list': posts[0:5]})
+    template='blog/index.html'
+    context={
+        'post_list': posts[0:5]
+    }
+    return render(request, template, context)
 
 
 def post_detail(request, post_id):
-    dt_now = timezone.now()
+    current_time = timezone.now()
     post = get_object_or_404(
         Post,
         pk=post_id,
-        pub_date__lte=dt_now,
+        pub_date__lte=current_time,
         is_published=True,
         category__is_published=True
     )
