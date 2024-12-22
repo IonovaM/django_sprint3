@@ -4,13 +4,15 @@ from django.utils import timezone
 
 
 def index_posts(posts):
-    dt_now = timezone.now()
+    current_time = timezone.now()
+
     posts = posts.filter(
-        pub_date__lte=dt_now,
+        pub_date__lte=current_time,
         is_published=True,
         category__is_published=True
-    )
-    return posts.order_by('-pub_date')
+    ).select_related('category').order_by('pub_date').reverse()
+
+    return posts
 
 
 def index(request):
