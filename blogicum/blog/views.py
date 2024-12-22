@@ -37,17 +37,17 @@ def post_detail(request, post_id):
 
 
 def category_posts(request, category_slug):
+    posts = index_posts(Post.objects)
+    template = 'blog/category.html'
+
     category = get_object_or_404(
         Category,
         slug=category_slug,
         is_published=True
     )
     posts = index_posts(category.posts)
-    return render(
-        request,
-        'blog/category.html',
-        {
-            'post_list': posts,
-            'category': category
-        }
-    )
+    context = {
+        'post_list': posts,
+        'category': category
+    }
+    return render(request, template, context)
